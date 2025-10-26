@@ -178,7 +178,7 @@ message ValidateCodeResponse {
 
 **Limits:**
 - Maximum codes per request: 2000
-- Code length: 7-15 characters
+- Code length: 7-8 characters
 
 ### UseCode
 
@@ -269,7 +269,7 @@ The load test simulates concurrent code generation and validation operations to 
 | Column | Type | Description |
 |--------|------|-------------|
 | `Id` | int (PK) | Auto-incrementing primary key |
-| `Code` | varchar(15) | Unique discount code (indexed) |
+| `Code` | varchar(32) | Unique discount code (indexed) |
 | `Length` | int | Length of the code |
 | `IsUsed` | boolean | Whether the code has been used |
 | `CreatedAt` | timestamp | Code creation timestamp |
