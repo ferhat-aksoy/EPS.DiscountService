@@ -72,8 +72,8 @@ The solution follows Clean Architecture principles with the following projects:
 2.  **Clone the repository**
 
     ```bash
-    git clone <repository-url>
-    cd <repository-directory>
+    git clone https://github.com/ferhat-aksoy/EPS.DiscountService.git
+    cd EPS.DiscountService
     ```
 
 3.  **Configure Database & Redis**
