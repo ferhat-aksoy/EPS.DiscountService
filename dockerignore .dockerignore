@@ -1,0 +1,34 @@
+# Directories
+**/bin/
+**/obj/
+**/out/
+**/TestResults/
+
+# Files
+**/*.user
+**/*.suo
+**/.vs/
+**/.vscode/
+**/.idea/
+**/appsettings.Development.json
+**/appsettings.Local.json
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+LICENSE
+
+# Docker
+**/Dockerfile*
+**/docker-compose*
+**/.dockerignore
+
+# Test projects
+**/*Tests/
+**/*Test/
+**/EPS.Discount.LoadTest/
+**/EPS.Discount.Client/

@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:latest
+    container_name: eps-discount-postgres
+    environment:
+      POSTGRES_DB: discount_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Discount@2024
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - discount-network
+
+  # Redis Cache
+  redis:
+    image: redis:latest
+    container_name: eps-discount-redis
+    command: redis-server --requirepass Discount@2024 --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - discount-network
+
+  # EPS Discount gRPC Server
+  discount-server:
+    build:
+      context: .
+      dockerfile: EPS.Discount.Server/Dockerfile
+    container_name: eps-discount-server
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=discount_db;Username=postgres;Password=Discount@2024
+      - ConnectionStrings__Redis=redis:6379,password=Discount@2024,ssl=False,abortConnect=False
+      - Redis__CacheExpirationMinutes=1440
+      - Database__Provider=postgres
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - discount-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  discount-network:
+    driver: bridge
