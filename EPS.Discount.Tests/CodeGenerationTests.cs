@@ -47,7 +47,7 @@ public class CodeGenerationTests
                               .ToArray();
 
         // Not all identical
-        Assert.True(codes.Distinct(StringComparer.Ordinal).Count() > 1);
+        Assert.True(codes.Distinct(StringComparer.OrdinalIgnoreCase).Count() > 1);
 
         // All chars in allowed alphabet
         Assert.All(codes.SelectMany(c => c), ch => Assert.Contains(ch, AllowedAlphabet));
@@ -111,7 +111,7 @@ public class CodeGenerationTests
         });
 
         // Very high likelihood of uniqueness; allow tiny margin just in case
-        int unique = all.Distinct(StringComparer.Ordinal).Count();
+        int unique = all.Distinct(StringComparer.OrdinalIgnoreCase).Count();
         Assert.True(unique >= all.Length - 2, $"Expected near-unique codes, got {unique}/{all.Length}");
     }
 }
